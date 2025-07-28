@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+  height: 100%;
+}
+
+.menu {
+  flex-basis: 240px;
+  margin-top: 2rem;
+  display: grid;
+  grid-row: 56px 1fr;
+}
+
+.context {
+  flex: 1;
+  display: grid;
+  grid-row: 24px 1fr;
+  background-color: var(--background);
+}

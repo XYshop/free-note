@@ -1,0 +1,103 @@
+:root {
+  --purple-light: rgba(88, 5, 255, 0.05);
+  --black: #2e2b29;
+}
+
+.ProseMirror:focus {
+  outline: none !important;
+}
+
+.tiptap,
+.ProseMirror {
+  padding: 0 24px;
+  overflow: auto;
+  height: calc(100vh - 24px);
+}
+
+.tiptap h1,
+.tiptap h2,
+.tiptap h3,
+.tiptap h4,
+.tiptap h5,
+.tiptap h6 {
+  font-weight: bold;
+  margin: 1em 0 0.6em 0;
+}
+
+.tiptap h1 {
+  font-size: 36px;
+}
+
+.tiptap h2 {
+  font-size: 32px;
+}
+
+.tiptap h3 {
+  font-size: 28px;
+}
+
+.tiptap h4 {
+  font-size: 24px;
+}
+
+.tiptap h5 {
+  font-size: 20px;
+}
+
+.tiptap h5 {
+  font-size: 16px;
+}
+
+.tiptap p {
+  line-height: 1.6;
+}
+
+.tiptap ul,
+.tiptap ol {
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.tiptap ul li {
+  list-style: disc;
+}
+
+.tiptap ul li li {
+  list-style: circle;
+}
+
+.tiptap ol li {
+  list-style: decimal;
+}
+
+.tiptap blockquote {
+  border-left: 4px solid hsla(0, 0%, 0%, 0.1);
+  color: #666;
+  margin: 0.5em 0;
+  padding: 0.5em 1em;
+}
+
+.tiptap pre {
+  border-radius: 4px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.tiptap code {
+  font-size: 0.85rem;
+  padding: 0.25em 0.5em;
+  border-radius: 0.4em;
+  color: var(--black);
+  background: var(--purple-light);
+}
+
+.tiptap pre,
+.tiptap pre code {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.tiptap pre code {
+  display: block;
+  line-height: 2;
+}

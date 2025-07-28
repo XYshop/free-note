@@ -1,45 +1,86 @@
-import { app, BrowserWindow } from "electron";
-import { createRequire } from "node:module";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
-createRequire(import.meta.url);
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-process.env.APP_ROOT = path.join(__dirname, "..");
-const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
-const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
-const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
-process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
-let win;
-function createWindow() {
-  win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+import { dialog as v, app as s, BrowserWindow as l, ipcMain as r } from "electron";
+import { fileURLToPath as N } from "node:url";
+import n from "node:path";
+import { homedir as R } from "os";
+import { readdir as E, readFile as d, writeFile as m, mkdir as p, unlink as P, stat as g } from "fs/promises";
+import { existsSync as f } from "fs";
+import T from "path";
+const i = () => {
+  const e = `${R()}/NoteMark`;
+  return f(e) || p(e, { recursive: !0 }), e;
+}, $ = async () => {
+  const e = i(), a = (await E(e)).filter((_) => _.endsWith(".md"));
+  return Promise.all(a.map(I));
+}, I = async (e) => {
+  const t = await g(`${i()}/${e}`), a = await d(`${i()}/${e}`, "utf-8");
+  return {
+    title: e.replace("./.md", ""),
+    lastEditTime: t.mtimeMs,
+    content: a
+  };
+}, y = async (e) => d(`${i()}/${e}`, "utf-8"), D = async (e, t) => {
+  await m(`${i()}/${e}`, t);
+}, O = async () => {
+  const e = i(), { filePath: t, canceled: a } = await v.showSaveDialog({
+    title: "new Note",
+    defaultPath: `${e}/Untitled.md`,
+    buttonLabel: "Create",
+    properties: ["showOverwriteConfirmation"],
+    showsTagField: !1,
+    filters: [{ name: "Markdown", extensions: ["md"] }]
+  });
+  if (a || !t) {
+    console.log("Note creation canceled");
+    return;
+  }
+  f(t) || (await p(T.dirname(t), { recursive: !0 }), await m(t, ""));
+}, S = async (e) => {
+  await P(`${i()}/${e}`);
+}, w = n.dirname(N(import.meta.url));
+process.env.APP_ROOT = n.join(w, "..");
+const c = process.env.VITE_DEV_SERVER_URL, C = n.join(process.env.APP_ROOT, "dist-electron"), u = n.join(process.env.APP_ROOT, "dist");
+process.env.VITE_PUBLIC = c ? n.join(process.env.APP_ROOT, "public") : u;
+let o;
+function h() {
+  o = new l({
+    icon: n.join(process.env.VITE_PUBLIC, "logo.png"),
+    autoHideMenuBar: !0,
+    vibrancy: "under-window",
+    visualEffectState: "active",
+    titleBarStyle: "hidden",
     webPreferences: {
-      preload: path.join(__dirname, "preload.mjs")
+      preload: n.join(w, "preload.mjs"),
+      sandbox: !0,
+      contextIsolation: !0
     }
-  });
-  win.webContents.on("did-finish-load", () => {
-    win == null ? void 0 : win.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
-  });
-  if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL);
-  } else {
-    win.loadFile(path.join(RENDERER_DIST, "index.html"));
-  }
+  }), o.webContents.on("did-finish-load", () => {
+    o == null || o.webContents.send("main-process-message", (/* @__PURE__ */ new Date()).toLocaleString());
+  }), c ? o.loadURL(c) : o.loadFile(n.join(u, "index.html")), r.handle(
+    "getNotes",
+    (e, ...t) => $(...t)
+  ), r.handle(
+    "readNote",
+    (e, ...t) => y(...t)
+  ), r.handle(
+    "saveNote",
+    (e, ...t) => D(...t)
+  ), r.handle(
+    "createNote",
+    (e, ...t) => O(...t)
+  ), r.handle(
+    "deleteNote",
+    (e, ...t) => S(...t)
+  );
 }
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-    win = null;
-  }
+s.on("window-all-closed", () => {
+  process.platform !== "darwin" && (s.quit(), o = null);
 });
-app.on("activate", () => {
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+s.on("activate", () => {
+  l.getAllWindows().length === 0 && h();
 });
-app.whenReady().then(createWindow);
+s.whenReady().then(h);
 export {
-  MAIN_DIST,
-  RENDERER_DIST,
-  VITE_DEV_SERVER_URL
+  C as MAIN_DIST,
+  u as RENDERER_DIST,
+  c as VITE_DEV_SERVER_URL
 };

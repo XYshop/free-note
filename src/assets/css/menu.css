@@ -1,0 +1,41 @@
+ul {
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+  height: calc(100vh - 88px);
+}
+
+li {
+  list-style: none;
+  text-align: left;
+}
+
+.menu-item {
+  margin: 5px 10px;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.menu-item:hover {
+  background-color: hsla(0, 0%, 60%, 0.6);
+}
+.menu-item.active {
+  background-color: hsla(0, 0%, 60%, 0.6);
+}
+
+.menu-title {
+  font-weight: bold;
+  line-height: 2;
+}
+
+.menu-time {
+  font-size: 12px;
+  color: #666;
+  line-height: 2;
+}
+
+.no-notes {
+  text-align: center;
+  color: #666;
+  font-weight: bold;
+  padding-top: 4px;
+}
