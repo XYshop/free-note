@@ -18,6 +18,6 @@ To build:
 bun run build
 ```
 
-![](/Users/joy/Desktop/Screenshot 2025-08-01 at 12.53.46.png)
+![](public/Screenshot-2025-08-01-12-53-46.png)
 
-![](/Users/joy/Desktop/Screenshot 2025-08-01 at 12.54.35.png)
+![](public/Screenshot-2025-08-01-12-54-35.png)
